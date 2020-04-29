@@ -1,0 +1,12 @@
+Package: Covid19StudyCodeToRun
+Type: Package
+Title: Study CodeToRun for OHDSI COVID packages
+Version: 0.9.0
+Date: 2020-04-29
+Authors@R: c(
+	person("Marc", "Suchard", email = "msuchard@ucla.edu", role = c("aut", "cre"))
+  )
+Description: Provides CodeToRun.R scripts for OHDSI COVID packages
+Imports:
+License: Apache License
+RoxygenNote: 7.1.0
