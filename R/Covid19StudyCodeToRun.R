@@ -23,3 +23,44 @@
 #' @docType package
 #' @name Covid19StudyCodeToRun
 NULL
+
+#' Print out SQL for a cohort
+#'
+#' @examples
+#' printCohortSql(cohortNumber = 1,
+#'                cohortId = 1,
+#'                packageName = "study",
+#'                dbms = "sql server",
+#'                cdmDatabaseSchema = "cdm",
+#'                vocabularyDatabaseSchema = "vocab",
+#'                cohortDatabaseSchema = "cohort_schema",
+#'                cohortTable = "cohort_table",
+#'                oracleTempSchema = NULL)
+#'
+#' @export
+printCohortSql <- function(cohortNumber,
+                           cohortId,
+                           packageName,
+                           dbms,
+                           cdmDatabaseSchema,
+                           vocabularyDatabaseSchema,
+                           cohortDatabaseSchema,
+                           cohortTable,
+                           oracleTempSchema = NULL) {
+
+  pathToCsv <- system.file("settings", "CohortsToCreate.csv", package = packageName)
+  cohortsToCreate <- read.csv(pathToCsv)
+  writeLines(paste("Creating cohort:", cohortsToCreate$name[cohortNumber]))
+  writeLines("")
+
+  sql <- SqlRender::loadRenderTranslateSql(sqlFilename = paste0(cohortsToCreate$name[cohortNumber], ".sql"),
+                                           packageName = packageName,
+                                           dbms = dbms,
+                                           oracleTempSchema = oracleTempSchema,
+                                           cdm_database_schema = cdmDatabaseSchema,
+                                           vocabulary_database_schema = vocabularyDatabaseSchema,
+                                           target_database_schema = cohortDatabaseSchema,
+                                           target_cohort_table = cohortTable,
+                                           target_cohort_id = cohortsToCreate$cohortId[cohortNumber])
+  writeLines(sql)
+}
